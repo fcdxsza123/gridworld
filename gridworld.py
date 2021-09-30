@@ -219,4 +219,4 @@ while(True):
     gridDisplay[player_coord] += 10
     print(np.flipud(gridDisplay))
     print("(",player_coord[0][0],",",player_coord[1][0],")")
-    print("Sensor Observation: "obs)
+    print("Sensor Observation: ",obs)
