@@ -43,10 +43,24 @@ def world_update(state,action,obs,obs_prob,tran_prob,current_state,act):
             break
         else:
             randVal-=prob_mx[possible_state[0][i]]
-    # observation = 
-    return newState
+    #calculate observation
+    obs_index =  len(obs)*newState
+    obs_prob_mx = np.copy(obs_prob[obs_index:obs_index+len(obs)])
+    randVal = np.random.random()
+    possible_obs = np.where(obs_prob_mx>0)
+    for i in range(len(possible_obs[0])):
+        prob = obs_prob_mx[possible_obs[0][i]]
+        if(randVal<prob):
+            observation = possible_obs[0][i]
+            break
+        else:
+            randVal-=obs_prob_mx[possible_obs[0][i]]        
+    return newState, observation
 state,action,obs,obs_prob,tran_prob,current_state = init()
 while(True):
     act = get_action(action)
-    current_state = world_update(state,action,obs,obs_prob,tran_prob,current_state,act)
+    current_state, observation = world_update(state,action,obs,obs_prob,tran_prob,current_state,act)
+    print("New State:")
     print(current_state)
+    print("Observation there:")
+    print(observation)

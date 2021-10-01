@@ -21,7 +21,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                 if(j+5>=25 or j+5==6 or j+5 ==7 or j+5 ==16 or j+5==17):
                     stayval +=1-p_e
                     upval = 0
-                if(j-5<=0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
+                if(j-5<0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
                     stayval +=p_e/4
                     downval = 0
                 if(j%5==4 or j+1==6 or j+1 ==7 or j+1 ==16 or j+1==17):
@@ -51,7 +51,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                 if(j+5>=25 or j+5==6 or j+5 ==7 or j+5 ==16 or j+5==17):
                     stayval +=p_e/4
                     upval = 0
-                if(j-5<=0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
+                if(j-5<0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
                     stayval +=p_e/4
                     downval = 0
                 if(j%5==4 or j+1==6 or j+1 ==7 or j+1 ==16 or j+1==17):
@@ -81,7 +81,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                 if(j+5>=25 or j+5==6 or j+5 ==7 or j+5 ==16 or j+5==17):
                     stayval +=p_e/4
                     upval = 0
-                if(j-5<=0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
+                if(j-5<0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
                     stayval +=1-p_e
                     downval = 0
                 if(j%5==4 or j+1==6 or j+1 ==7 or j+1 ==16 or j+1==17):
@@ -111,7 +111,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                 if(j+5>=25 or j+5==6 or j+5 ==7 or j+5 ==16 or j+5==17):
                     stayval +=p_e/4
                     upval = 0
-                if(j-5<=0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
+                if(j-5<0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
                     stayval +=p_e/4
                     downval = 0
                 if(j%5==4 or j+1==6 or j+1 ==7 or j+1 ==16 or j+1==17):
@@ -141,7 +141,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                 if(j+5>=25 or j+5==6 or j+5 ==7 or j+5 ==16 or j+5==17):
                     stayval +=p_e/4
                     upval = 0
-                if(j-5<=0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
+                if(j-5<0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
                     stayval +=p_e/4
                     downval = 0
                 if(j%5==4 or j+1==6 or j+1 ==7 or j+1 ==16 or j+1==17):
