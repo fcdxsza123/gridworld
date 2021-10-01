@@ -19,7 +19,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                 downval = p_e/4
                 leftval = p_e/4
                 if(j+5>=25 or j+5==6 or j+5 ==7 or j+5 ==16 or j+5==17):
-                    stayval +=p_e/4
+                    stayval +=1-p_e
                     upval = 0
                 if(j-5<=0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
                     stayval +=p_e/4
@@ -55,7 +55,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                     stayval +=p_e/4
                     downval = 0
                 if(j%5==4 or j+1==6 or j+1 ==7 or j+1 ==16 or j+1==17):
-                    stayval +=p_e/4
+                    stayval +=1-p_e
                     rightval = 0
                 if(j%5==0 or j-1==6 or j-1 ==7 or j-1 ==16 or j-1==17):
                     stayval +=p_e/4
@@ -82,7 +82,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                     stayval +=p_e/4
                     upval = 0
                 if(j-5<=0 or j-5==6 or j-5 ==7 or j-5 ==16 or j-5==17):
-                    stayval +=p_e/4
+                    stayval +=1-p_e
                     downval = 0
                 if(j%5==4 or j+1==6 or j+1 ==7 or j+1 ==16 or j+1==17):
                     stayval +=p_e/4
@@ -118,7 +118,7 @@ for i in range(5):      #num of actions in order: up right down left stay
                     stayval +=p_e/4
                     rightval = 0
                 if(j%5==0 or j-1==6 or j-1 ==7 or j-1 ==16 or j-1==17):
-                    stayval +=p_e/4
+                    stayval +=1-p_e
                     leftval = 0
                 if(k==j+5):
                     bigboy.append(upval)
