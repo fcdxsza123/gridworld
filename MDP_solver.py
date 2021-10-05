@@ -28,7 +28,7 @@ def get_action(actions):
 def world_update(state,action,obs,obs_prob,tran_prob,current_state,act):
     randVal = np.random.random()
     #offsets for tran_prob are as follows: biggest chunks are based on actions, subchunk on starting state, thats the matrix of interest
-    offset = act #gives index of action, i.e. desired big chunk
+    offset = int(act) #gives index of action, i.e. desired big chunk
     offset_index = int(len(tran_prob)/len(action))
     start_index = int(offset*offset_index)
     #okay we have where to start, next we need to go the point for the current state
