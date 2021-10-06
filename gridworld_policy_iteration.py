@@ -5,12 +5,12 @@ Created on Tue Oct  5 17:20:25 2021
 @author: vaheg
 """
 import numpy as np
-
+from MDP_sim import MDP_sim
 def evaluation(policy, value_old, action, reward, prob_mx):
     value_new = np.copy(value_old)
     for s in range(len(policy)):
         value_new_current_state = 0
-        prob_action = policy(s) #policy contains quadruples
+        prob_action = policy(s) #policy contains quints (each entree is a state)
         for a in range(len(action)):
             reward_offset = s*len(action)+a
             offset_index = int(len(prob_mx)/len(action))
@@ -24,3 +24,6 @@ def evaluation(policy, value_old, action, reward, prob_mx):
                 future_state_sum+=prob*value_old(possible_state[0][i])
             value_new_current_state+=prob_action[a]*(reward(reward_offset)+future_state_sum)
         value_new[s] = value_new_current_state
+    return value_new
+sim = MDP_sim() #extreme laziness lol
+policy = np.zeros((len(sim.state),len(sim.action)))
