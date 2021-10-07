@@ -7,7 +7,7 @@ Created on Tue Oct  5 17:20:25 2021
 import numpy as np
 import matplotlib.pyplot as plt
 class gridworld_policy_iteration:
-    def __init__(self,policy,value,action,q_fn,prob_mx,rows,cols):
+    def __init__(self,policy,value,action,q_fn,prob_mx,rows,cols,gamma):
         self.policy = policy 
         self.value = value
         self.action = action
@@ -15,6 +15,7 @@ class gridworld_policy_iteration:
         self.prob_mx = prob_mx
         self.rows = rows
         self.cols = cols
+        self.gamma = gamma
     def evaluation(self):
         value_new = np.copy(self.value)
         for s in range(len(self.policy)):
@@ -31,7 +32,7 @@ class gridworld_policy_iteration:
                 for i in range(len(possible_state[0])):
                     prob = prob_mx_work[possible_state[0][i]]
                     future_state_sum+=prob*self.value[possible_state[0][i]]
-                value_new_current_state+=prob_action[a]*(self.reward[reward_offset]+future_state_sum)
+                value_new_current_state+=prob_action[a]*(self.reward[reward_offset]+self.gamma*future_state_sum)
             value_new[s] = value_new_current_state
         self.value = value_new
     

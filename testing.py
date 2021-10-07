@@ -16,7 +16,7 @@ generator = gridworld_generator(2,12,5,5,.1,[6,7,16,17],rewards)
 MDP, Q = generator.generate()
 simulator = MDP_sim(MDP,0)
 values = np.zeros(len(rewards))
-iterator = gridworld_policy_iteration(generator.init_policy,values,MDP.action.dropna(),Q,MDP.transition_probability.dropna(),5,5)
+iterator = gridworld_policy_iteration(generator.init_policy,values,MDP.action.dropna(),Q,MDP.transition_probability.dropna(),5,5,1)
 old_value = iterator.value
 iterator.evaluation()
 new_value = iterator.value
