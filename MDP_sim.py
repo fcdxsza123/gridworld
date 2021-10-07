@@ -9,15 +9,15 @@ import numpy as np
 import pandas as pd
 
 class MDP_sim:
-    def __init__(self):
-        df = pd.read_csv('input.csv')
+    def __init__(self,MDP,curr_state):
+        df = MDP
         
-        self.action = df.action.dropna()
-        self.state = df.state.dropna()
-        self.obs = df.observation.dropna()
-        self.obs_prob = df.observation_probability.dropna()
-        self.tran_prob = df.transition_probability.dropna()
-        self.current_state = input("Current State of Actor:")
+        self.action = MDP.action.dropna()
+        self.state = MDP.state.dropna()
+        self.obs = MDP.observation.dropna()
+        self.obs_prob = MDP.observation_probability.dropna()
+        self.tran_prob = MDP.transition_probability.dropna()
+        self.current_state = curr_state
         
     def get_action(self):
         print("List of possible actions:")
