@@ -53,8 +53,8 @@ class gridworld_policy_iteration:
                             state_policy[a] = 1
                             old_index = a
                     else:
-                        if(max_val <= self.value[s+5]):
-                            max_val = self.value[s+5]
+                        if(max_val <= self.value[s+self.cols]):
+                            max_val = self.value[s+self.cols]
                             state_policy[old_index] = 0
                             state_policy[a] = 1
                             old_index = a
@@ -79,8 +79,8 @@ class gridworld_policy_iteration:
                             state_policy[a] = 1
                             old_index = a
                     else:
-                        if(max_val <= self.value[s-5]):
-                            max_val = self.value[s-5]
+                        if(max_val <= self.value[s-self.cols]):
+                            max_val = self.value[s-self.cols]
                             state_policy[old_index] = 0
                             state_policy[a] = 1
                             old_index = a

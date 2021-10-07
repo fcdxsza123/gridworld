@@ -8,6 +8,7 @@ Created on Wed Oct  6 20:39:34 2021
 import numpy as np
 import pandas as pd
 import math
+import matplotlib.pyplot as plt
 
 class gridworld_generator:
     def __init__(self, ice_cream_1,ice_cream_2, rows, cols, wind,obstacles,rewards):
@@ -26,6 +27,39 @@ class gridworld_generator:
             r = [.2,.2,.2,.2,.2]
             policy[i] = r
         self.init_policy = policy
+        
+    def plotreward(self):
+        fig, ax = plt.subplots()
+        ax.imshow(np.zeros((self.rows,self.cols)), cmap='binary')
+        ax.set_xticks(list(range(self.cols)))
+        ax.set_yticks(list(range(self.rows)))
+        counter = 0
+        for i in range(self.rows):
+            for j in range(self.cols):
+                ax.text(j,i,self.rewards[counter], ha='center', va='center')
+                counter+=1
+        plt.gca().invert_yaxis()
+        plt.show()
+        
+    def plotworld(self):
+        fig, ax = plt.subplots()
+        ax.imshow(np.zeros((self.rows,self.cols)), cmap='binary')
+        ax.set_xticks(list(range(self.cols)))
+        ax.set_yticks(list(range(self.rows)))
+        counter = 0
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if(counter in self.obstacle_locations):
+                    ax.text(j,i,'O', ha='center', va='center')
+                elif(counter == self.ice_cream_1 or counter == self.ice_cream_2):
+                    ax.text(j,i,'I', ha='center', va='center')
+                elif(self.rewards[counter]<0):
+                    ax.text(j,i,'R', ha='center', va='center')
+                else:
+                    ax.text(j,i,'', ha='center', va='center')
+                counter+=1
+        plt.gca().invert_yaxis()
+        plt.show()
     def transition_calculator(self):
         bigboy = []
         for i in range(5):      #num of actions in order: up right down left stay
