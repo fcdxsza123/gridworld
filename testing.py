@@ -10,12 +10,12 @@ from MDP_sim import MDP_sim
 from gridworld_policy_iteration import gridworld_policy_iteration
 from gridworld_value_iteration import gridworld_value_iteration
 import numpy as np
-epsilon = 0.01
+epsilon = 0.1
 rows = 5
 cols = 5
 ice_cream_loc_1 = 2 # zero indexed
 ice_cream_loc_2 = 12 # zero indexed
-wind_prob = 0.0
+wind_prob = 0.1
 obstacles = [6,7,16,17] # zero indexed
 starting_state = 0
 gamma = .9
@@ -28,7 +28,7 @@ for i in range(rows):
         counter+=1
         
 rewards[ice_cream_loc_1] = 1
-rewards[ice_cream_loc_2] = 1       
+rewards[ice_cream_loc_2] = 10
 rewards[obstacles] = 0
 
 generator = gridworld_generator(ice_cream_loc_1,ice_cream_loc_2,rows,cols,wind_prob,obstacles,rewards)

@@ -23,9 +23,7 @@ class gridworld_policy_iteration:
         new_value = np.copy(self.value)
         counter = 1
         delta = np.inf
-        osc_var = delta
         delta = np.min([delta,np.max(np.abs(old_value-new_value))])
-        oscillation_counter = 0
         
         while(delta>epsilon):
             old_value = np.copy(self.value)
@@ -34,11 +32,6 @@ class gridworld_policy_iteration:
             new_value = np.copy(self.value)
             counter+=1
             delta = np.min([delta,np.max(np.abs(old_value-new_value))])
-            if(osc_var==delta):
-                oscillation_counter+=1
-            osc_var = delta
-            if(oscillation_counter>400):
-                delta = 0
         self.plot()
         return counter
     def evaluation(self):
