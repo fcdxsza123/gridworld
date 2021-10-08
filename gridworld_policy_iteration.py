@@ -16,6 +16,24 @@ class gridworld_policy_iteration:
         self.rows = rows
         self.cols = cols
         self.gamma = gamma
+    
+    def full(self,epsilon):
+        old_value = np.copy(self.value)
+        self.evaluation()
+        new_value = np.copy(self.value)
+        counter = 1
+        delta = np.inf
+        delta = np.min([delta,np.max(np.abs(old_value-new_value))])
+        while(delta>epsilon):
+            old_value = np.copy(self.value)
+            self.iterate()
+            self.evaluation()
+            new_value = np.copy(self.value)
+            counter+=1
+            delta = np.min([delta,np.max(np.abs(old_value-new_value))])
+        self.plot()
+        return counter
+    
     def evaluation(self):
         value_new = np.copy(self.value)
         for s in range(len(self.policy)):
@@ -114,6 +132,12 @@ class gridworld_policy_iteration:
         plt.colorbar(label = 'Value at State', orientation = 'vertical')
         ax.set_xticks(list(range(self.cols)))
         ax.set_yticks(list(range(self.rows)))
+        counter = 0
+        for i in range(self.rows):
+            for j in range(self.cols):
+               ax.text(j,i,str(round(self.value[counter], 2)), ha='center', va='center')
+               counter+=1
+        
         plt.gca().invert_yaxis()
         plt.show()
 
