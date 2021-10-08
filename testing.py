@@ -10,12 +10,12 @@ from MDP_sim import MDP_sim
 from gridworld_policy_iteration import gridworld_policy_iteration
 from gridworld_value_iteration import gridworld_value_iteration
 import numpy as np
-epsilon = 0.1
+epsilon = 0.01
 rows = 5
 cols = 5
 ice_cream_loc_1 = 2 # zero indexed
 ice_cream_loc_2 = 12 # zero indexed
-wind_prob = 0.1
+wind_prob = 0.0
 obstacles = [6,7,16,17] # zero indexed
 starting_state = 0
 gamma = .9
