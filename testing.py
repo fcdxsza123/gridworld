@@ -18,7 +18,7 @@ ice_cream_loc_2 = 12 # zero indexed
 wind_prob = 0.0
 obstacles = [6,7,16,17] # zero indexed
 starting_state = 0
-gamma = .99
+gamma = .9
 rewards = np.zeros(rows*cols)
 counter = 0
 for i in range(rows):
