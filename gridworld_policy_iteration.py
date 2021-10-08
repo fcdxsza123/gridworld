@@ -18,28 +18,45 @@ class gridworld_policy_iteration:
         self.gamma = gamma
     
     def full(self,epsilon):
+        old_policy = np.copy(self.policy)
+        self.evaluation(epsilon)
+        self.iterate()
+        new_policy = np.copy(self.policy)
+        counter = 1
+        print(counter)
+        policy_stable = np.array_equal(old_policy,new_policy)
+        while(not policy_stable):
+            old_policy = np.copy(self.policy)
+            self.evaluation(epsilon)
+            self.iterate()
+            new_policy = np.copy(self.policy)
+            counter+=1
+            policy_stable = np.array_equal(old_policy,new_policy)
+            print(counter)
+        self.plot()
+        return counter
+    
+    def evaluation(self,epsilon):
         old_value = np.copy(self.value)
-        self.evaluation()
+        self.evaluate()
         new_value = np.copy(self.value)
         counter = 1
         delta = np.inf
         delta = np.min([delta,np.max(np.abs(old_value-new_value))])
-        
-        while(delta>epsilon):
+        while(delta>=epsilon):
             old_value = np.copy(self.value)
-            self.iterate()
-            self.evaluation()
+            self.evaluate()
             new_value = np.copy(self.value)
             counter+=1
             delta = np.min([delta,np.max(np.abs(old_value-new_value))])
-        self.plot()
-        return counter
-    def evaluation(self):
-        value_new = np.zeros(np.size(self.value))
+    
+    def evaluate(self):
+        helper = np.copy(self.value)
         for s in range(len(self.policy)):
+            # print(s)
             potential_values = np.zeros((len(self.action),1))
-            prob_action = self.policy[s]
             for a in range(len(self.action)):
+                # print(a)
                 reward_offset = s*len(self.action)+a #rewards are based on transitions so each state has its own chunk based on actions
                 offset_index = int(len(self.prob_mx)/len(self.action))
                 start_index = int(a*offset_index)
@@ -49,11 +66,11 @@ class gridworld_policy_iteration:
                 future_state_sum = 0
                 for i in range(len(possible_state[0])):
                     prob = prob_mx_work[possible_state[0][i]]
-                    future_state_sum+=prob*self.value[possible_state[0][i]]            
-                potential_values[a] = prob_action[a]*(self.reward[reward_offset]+self.gamma*future_state_sum)
-            value_new[s] = sum(potential_values)
-        self.value = value_new
-    
+                    future_state_sum+=prob*self.value[possible_state[0][i]]
+                potential_values[a] = self.policy[s][a]*(self.reward[reward_offset]+self.gamma*future_state_sum)
+            helper[s] = np.sum(potential_values)
+        self.value = helper
+        
     def iterate(self):
         policy_new = np.zeros(np.shape(self.policy))
         for s in range(len(policy_new)):
@@ -75,8 +92,9 @@ class gridworld_policy_iteration:
             else:
                 store.append(self.value[s])
             store.append(self.value[s])
+            policy_value = np.max(store)
             policy_index = np.argmax(store)
-            if(np.max(store) == self.value[s]):
+            if(store[4] == policy_value):
                 policy_index = 4
             policy_new[s][policy_index] = 1
         self.policy = policy_new

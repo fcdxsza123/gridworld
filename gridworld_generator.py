@@ -24,7 +24,8 @@ class gridworld_generator:
         self.rewards = rewards
         policy = np.zeros((len(rewards),5))
         for i in range(len(rewards)):
-            r = [.2,.2,.2,.2,.2]
+            # r = [.2,.2,.2,.2,.2]
+            r = [0,0,0,0,1]
             policy[i] = r
         self.init_policy = policy
         

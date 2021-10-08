@@ -20,6 +20,7 @@ class gridworld_value_iteration:
         
     def iteration(self):
         self.policy = np.zeros(np.shape(self.policy))
+        helper = np.copy(self.value)
         for s in range(len(self.policy)):
             potential_values = np.zeros((len(self.action),1))
             for a in range(len(self.action)):
@@ -34,10 +35,12 @@ class gridworld_value_iteration:
                     prob = prob_mx_work[possible_state[0][i]]
                     future_state_sum+=prob*self.value[possible_state[0][i]]            
                 potential_values[a] = self.reward[reward_offset]+self.gamma*future_state_sum
-            self.value[s] = np.max(potential_values)
+            helper[s] = np.max(potential_values)
             index = np.argmax(potential_values)
+            if(potential_values[4]==helper[s]):
+                index = 4
             self.policy[s][index]=1
-            
+        self.value = helper
     def full(self,epsilon):
         old_value = np.copy(self.value)
         self.iteration()
@@ -45,7 +48,7 @@ class gridworld_value_iteration:
         counter = 1
         delta = np.inf
         delta = np.min([delta,np.max(np.abs(old_value-new_value))])
-        while(delta>epsilon):
+        while(delta>=epsilon):
             old_value = np.copy(self.value)
             self.iteration()
             new_value = np.copy(self.value)
