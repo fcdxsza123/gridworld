@@ -10,15 +10,15 @@ from MDP_sim import MDP_sim
 from gridworld_policy_iteration import gridworld_policy_iteration
 from gridworld_value_iteration import gridworld_value_iteration
 import numpy as np
-epsilon = 0.01
+epsilon = 0.1
 rows = 5
 cols = 5
 ice_cream_loc_1 = 2 # zero indexed
 ice_cream_loc_2 = 12 # zero indexed
-wind_prob = .5
+wind_prob = 0.0
 obstacles = [6,7,16,17] # zero indexed
-starting_state = 3
-gamma = 0.9
+starting_state = 0
+gamma = .99
 rewards = np.zeros(rows*cols)
 counter = 0
 for i in range(rows):

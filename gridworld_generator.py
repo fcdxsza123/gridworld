@@ -298,22 +298,22 @@ class gridworld_generator:
                 if(not(s in self.obstacle_locations)):
                     if(a == 0):
                         if(s+self.cols>=self.cols*self.rows):
-                             rewards_at_transition[counter] = self.rewards[s]
+                             rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s+self.cols]
                     elif(a==1):
                         if(s%self.cols==(self.cols-1)):
-                            rewards_at_transition[counter] = self.rewards[s]
+                            rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s+1]
                     elif(a==2):
                         if(s-self.cols<0):
-                             rewards_at_transition[counter] = self.rewards[s]
+                             rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s-self.cols]
                     elif(a==3):
                         if(s%self.cols==0):
-                            rewards_at_transition[counter] = self.rewards[s]
+                            rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s-1]
                     elif(a==4):
