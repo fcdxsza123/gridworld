@@ -59,6 +59,7 @@ class gridworld_policy_iteration:
                     future_state_sum+=prob*self.value[possible_state[0][i]]            
                 potential_values[a] = prob_action[a]*(self.reward[reward_offset]+self.gamma*future_state_sum)
             value_new[s] = sum(potential_values)
+        self.policy = value_new
     
     def iterate(self):
         policy_new = np.zeros(np.shape(self.policy))
