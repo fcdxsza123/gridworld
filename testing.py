@@ -24,10 +24,10 @@ counter = 0
 for i in range(rows):
     for j in range(cols):
         if(j==cols-1):
-            rewards[counter] = -1
+            rewards[counter] = -10
         counter+=1
         
-rewards[ice_cream_loc_1] = 1
+rewards[ice_cream_loc_1] = 10
 rewards[ice_cream_loc_2] = 1
 rewards[obstacles] = 0
 

@@ -23,6 +23,8 @@ class gridworld_value_iteration:
         helper = np.copy(self.value)
         for s in range(len(self.policy)):
             potential_values = np.zeros((len(self.action),1))
+            # if(s==6):
+            #     print(s)
             for a in range(len(self.action)):
                 reward_offset = s*len(self.action)+a #rewards are based on transitions so each state has its own chunk based on actions
                 offset_index = int(len(self.prob_mx)/len(self.action))
@@ -33,7 +35,7 @@ class gridworld_value_iteration:
                 future_state_sum = 0
                 for i in range(len(possible_state[0])):
                     prob = prob_mx_work[possible_state[0][i]]
-                    future_state_sum+=prob*self.value[possible_state[0][i]]            
+                    future_state_sum+=prob*self.value[possible_state[0][i]]
                 potential_values[a] = self.reward[reward_offset]+self.gamma*future_state_sum
             helper[s] = np.max(potential_values)
             index = np.argmax(potential_values)

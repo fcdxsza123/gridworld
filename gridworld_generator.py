@@ -65,158 +65,62 @@ class gridworld_generator:
         bigboy = []
         for i in range(5):      #num of actions in order: up right down left stay
             for j in range(self.rows*self.cols): #num of states in order (0,0) (0,1) ... (4,4)
+                if(i==0): #up
+                    stayval = self.wind/4
+                    upval = 1-self.wind
+                    rightval = self.wind/4
+                    downval = self.wind/4
+                    leftval = self.wind/4
+                elif(i==1): #right
+                    stayval = self.wind/4
+                    upval = self.wind/4
+                    rightval = 1-self.wind
+                    downval = self.wind/4
+                    leftval = self.wind/4
+                elif(i==2): #down
+                    stayval = self.wind/4
+                    upval = self.wind/4
+                    rightval = self.wind/4
+                    downval = 1-self.wind
+                    leftval = self.wind/4
+                elif(i==3): #left
+                    stayval = self.wind/4
+                    upval = self.wind/4
+                    rightval = self.wind/4
+                    downval = self.wind/4
+                    leftval = 1-self.wind
+                else:       #stay
+                    stayval = 1-self.wind
+                    upval = self.wind/4
+                    rightval = self.wind/4
+                    downval = self.wind/4
+                    leftval = self.wind/4
+                if(j+self.cols>=self.cols*self.rows or ((j+self.cols) in self.obstacle_locations)):
+                    stayval +=upval
+                    upval = 0
+                if(j-self.cols<0 or ((j-self.cols) in self.obstacle_locations)):
+                    stayval +=downval
+                    downval = 0
+                if((j%self.cols==(self.cols-1)) or ((j+1) in self.obstacle_locations)):
+                    stayval +=rightval
+                    rightval = 0
+                if(j%self.cols==0 or ((j-1) in self.obstacle_locations)):
+                    stayval +=leftval
+                    leftval = 0
                 for k in range(self.rows*self.cols):
                     if(not(j in self.obstacle_locations)):
-                        if(i==0): #up
-                            stayval = self.wind/4
-                            upval = 1-self.wind
-                            rightval = self.wind/4
-                            downval = self.wind/4
-                            leftval = self.wind/4
-                            if(j+self.cols>=self.cols*self.rows or ((j+self.cols) in self.obstacle_locations)):
-                                stayval +=1-self.wind
-                                upval = 0
-                            if(j-self.cols<0 or ((j-self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                downval = 0
-                            if((j%self.cols==(self.cols-1)) or ((j+1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                rightval = 0
-                            if(j%self.cols==0 or ((j-1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                leftval = 0
-                            if(k==j+self.cols):
-                                bigboy.append(upval)
-                            elif(k==j+1):
-                                bigboy.append(rightval)
-                            elif(k==j-self.cols):
-                                bigboy.append(downval)
-                            elif(k==j-1):
-                                bigboy.append(leftval)
-                            elif(k==j):
-                                bigboy.append(stayval)
-                            else:
-                                bigboy.append(0)
-                        elif(i==1): #right
-                            stayval = self.wind/4
-                            upval = self.wind/4
-                            rightval = 1-self.wind
-                            downval = self.wind/4
-                            leftval = self.wind/4
-                            if(j+self.cols>=self.cols*self.rows or((j+self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                upval = 0
-                            if(j-self.cols<0 or ((j-self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                downval = 0
-                            if((j%self.cols==(self.cols-1)) or ((j+1) in self.obstacle_locations)):
-                                stayval +=1-self.wind
-                                rightval = 0
-                            if(j%self.cols==0 or ((j-1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                leftval = 0
-                            if(k==j+self.cols):
-                                bigboy.append(upval)
-                            elif(k==j+1):
-                                bigboy.append(rightval)
-                            elif(k==j-self.cols):
-                                bigboy.append(downval)
-                            elif(k==j-1):
-                                bigboy.append(leftval)
-                            elif(k==j):
-                                bigboy.append(stayval)
-                            else:
-                                bigboy.append(0)
-                        elif(i==2): #down
-                            stayval = self.wind/4
-                            upval = self.wind/4
-                            rightval = self.wind/4
-                            downval = 1-self.wind
-                            leftval = self.wind/4
-                            if(j+self.cols>=self.cols*self.rows or((j+self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                upval = 0
-                            if(j-self.cols<0 or ((j-self.cols) in self.obstacle_locations)):
-                                stayval +=1-self.wind
-                                downval = 0
-                            if((j%self.cols==(self.cols-1)) or ((j+1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                rightval = 0
-                            if(j%self.cols==0 or ((j-1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                leftval = 0
-                            if(k==j+self.cols):
-                                bigboy.append(upval)
-                            elif(k==j+1):
-                                bigboy.append(rightval)
-                            elif(k==j-self.cols):
-                                bigboy.append(downval)
-                            elif(k==j-1):
-                                bigboy.append(leftval)
-                            elif(k==j):
-                                bigboy.append(stayval)
-                            else:
-                                bigboy.append(0)
-                        elif(i==3): #left
-                            stayval = self.wind/4
-                            upval = self.wind/4
-                            rightval = self.wind/4
-                            downval = self.wind/4
-                            leftval = 1-self.wind
-                            if(j+self.cols>=self.cols*self.rows or((j+self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                upval = 0
-                            if(j-self.cols<0 or ((j-self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                downval = 0
-                            if((j%self.cols==(self.cols-1)) or ((j+1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                rightval = 0
-                            if(j%self.cols==0 or ((j-1) in self.obstacle_locations)):
-                                stayval +=1-self.wind
-                                leftval = 0
-                            if(k==j+self.cols):
-                                bigboy.append(upval)
-                            elif(k==j+1):
-                                bigboy.append(rightval)
-                            elif(k==j-self.cols):
-                                bigboy.append(downval)
-                            elif(k==j-1):
-                                bigboy.append(leftval)
-                            elif(k==j):
-                                bigboy.append(stayval)
-                            else:
-                                bigboy.append(0)
-                        else:       #stay
-                            stayval = 1-self.wind
-                            upval = self.wind/4
-                            rightval = self.wind/4
-                            downval = self.wind/4
-                            leftval = self.wind/4
-                            if(j+self.cols>=self.cols*self.rows or((j+self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                upval = 0
-                            if(j-self.cols<0 or ((j-self.cols) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                downval = 0
-                            if((j%self.cols==(self.cols-1)) or ((j+1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                rightval = 0
-                            if(j%self.cols==0 or ((j-1) in self.obstacle_locations)):
-                                stayval +=self.wind/4
-                                leftval = 0
-                            if(k==j+self.cols):
-                                bigboy.append(upval)
-                            elif(k==j+1):
-                                bigboy.append(rightval)
-                            elif(k==j-self.cols):
-                                bigboy.append(downval)
-                            elif(k==j-1):
-                                bigboy.append(leftval)
-                            elif(k==j):
-                                bigboy.append(stayval)
-                            else:
-                                bigboy.append(0)
+                        if(k==j+self.cols):
+                            bigboy.append(upval)
+                        elif(k==j+1):
+                            bigboy.append(rightval)
+                        elif(k==j-self.cols):
+                            bigboy.append(downval)
+                        elif(k==j-1):
+                            bigboy.append(leftval)
+                        elif(k==j):
+                            bigboy.append(stayval)
+                        else:
+                            bigboy.append(0)
                     else:
                         if(i==4 and j==k):
                             bigboy.append(1)
@@ -298,23 +202,23 @@ class gridworld_generator:
             for a in range(5):
                 if(not(s in self.obstacle_locations)):
                     if(a == 0):
-                        if(s+self.cols>=self.cols*self.rows):
-                             rewards_at_transition[counter] = self.rewards[s]
+                        if(s+self.cols>=self.cols*self.rows or ((s+self.cols) in self.obstacle_locations)):
+                             rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s+self.cols]
                     elif(a==1):
-                        if(s%self.cols==(self.cols-1)):
-                            rewards_at_transition[counter] = self.rewards[s]
+                        if(s%self.cols==(self.cols-1) or ((s+1) in self.obstacle_locations)):
+                            rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s+1]
                     elif(a==2):
-                        if(s-self.cols<0):
-                             rewards_at_transition[counter] = self.rewards[s]
+                        if(s-self.cols<0 or ((s-self.cols) in self.obstacle_locations)):
+                             rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s-self.cols]
                     elif(a==3):
-                        if(s%self.cols==0):
-                            rewards_at_transition[counter] = self.rewards[s]
+                        if(s%self.cols==0  or ((s-1) in self.obstacle_locations)):
+                            rewards_at_transition[counter] = 0
                         else:
                              rewards_at_transition[counter] = self.rewards[s-1]
                     elif(a==4):
