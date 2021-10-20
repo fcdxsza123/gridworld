@@ -25,7 +25,7 @@ class gridworld_generator:
         policy = np.zeros((len(rewards),5))
         for i in range(len(rewards)):
             # r = [.2,.2,.2,.2,.2]
-            r = [0,0,0,0,1]
+            r = [1,0,0,0,0]
             policy[i] = r
         self.init_policy = policy
         
@@ -218,6 +218,14 @@ class gridworld_generator:
                             rewards_at_transition[counter] = self.rewards[s]
                         else:
                             rewards_at_transition[counter] = 0
+                        # if(a==0 and top):
+                        #     rewards_at_transition[counter] = self.rewards[s]
+                        # if(a==1 and rightside):
+                        #     rewards_at_transition[counter] = self.rewards[s]
+                        # if(a==2 and bottom):
+                        #     rewards_at_transition[counter] = self.rewards[s]
+                        # if(a==3 and leftside):
+                        #     rewards_at_transition[counter] = self.rewards[s]
                         if(s_prime in self.obstacle_locations):
                             rewards_at_transition[counter] = 0
                     else:

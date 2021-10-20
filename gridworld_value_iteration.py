@@ -39,8 +39,6 @@ class gridworld_value_iteration:
                     future_state_sum+=prob*self.value[possible_state[0][i]]
                     reward_sum += prob*reward_mx_work[possible_state[0][i]]
                 potential_values[a] =(reward_sum+self.gamma*future_state_sum)
-            if(s == 12):
-                print("help")
             helper[s] = np.max(potential_values)
         self.value = helper
                 

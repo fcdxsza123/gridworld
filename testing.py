@@ -24,11 +24,11 @@ counter = 0
 for i in range(rows):
     for j in range(cols):
         if(j==cols-1):
-            rewards[counter] = -1
+            rewards[counter] = -10
         counter+=1
         
-rewards[ice_cream_loc_1] = 10
-rewards[ice_cream_loc_2] = 1
+rewards[ice_cream_loc_1] = 1
+rewards[ice_cream_loc_2] = 10
 rewards[obstacles] = 0
 
 generator = gridworld_generator(ice_cream_loc_1,ice_cream_loc_2,rows,cols,wind_prob,obstacles,rewards)
@@ -38,6 +38,6 @@ MDP, rewards = generator.generate()
 simulator = MDP_sim(MDP,starting_state)
 values = np.zeros(rows*cols)
 p_iterator = gridworld_policy_iteration(generator.init_policy,values,MDP.action.dropna(),rewards,MDP.transition_probability.dropna(),rows,cols,gamma)
-# print(p_iterator.full(epsilon))
+print(p_iterator.full(epsilon))
 v_iterator = gridworld_value_iteration(generator.init_policy,values,MDP.action.dropna(),rewards,MDP.transition_probability.dropna(),rows,cols,gamma)
 print(v_iterator.full(epsilon))
