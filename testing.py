@@ -18,7 +18,7 @@ ice_cream_loc_2 = 12 # zero indexed
 wind_prob = 0.1
 obstacles = [6,7,16,17] # zero indexed
 starting_state = 0
-gamma = .9
+gamma = .4
 rewards = np.zeros(rows*cols)
 counter = 0
 for i in range(rows):
@@ -27,7 +27,7 @@ for i in range(rows):
             rewards[counter] = -1
         counter+=1
         
-rewards[ice_cream_loc_1] = 1
+rewards[ice_cream_loc_1] = 10
 rewards[ice_cream_loc_2] = 1
 rewards[obstacles] = 0
 
@@ -38,6 +38,6 @@ MDP, rewards = generator.generate()
 simulator = MDP_sim(MDP,starting_state)
 values = np.zeros(rows*cols)
 p_iterator = gridworld_policy_iteration(generator.init_policy,values,MDP.action.dropna(),rewards,MDP.transition_probability.dropna(),rows,cols,gamma)
-print(p_iterator.full(epsilon))
+# print(p_iterator.full(epsilon))
 v_iterator = gridworld_value_iteration(generator.init_policy,values,MDP.action.dropna(),rewards,MDP.transition_probability.dropna(),rows,cols,gamma)
 print(v_iterator.full(epsilon))
