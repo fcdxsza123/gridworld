@@ -7,11 +7,11 @@ Created on Tue Oct  5 17:20:25 2021
 import numpy as np
 import matplotlib.pyplot as plt
 class gridworld_policy_iteration:
-    def __init__(self,policy,value,action,q_fn,prob_mx,rows,cols,gamma):
+    def __init__(self,policy,value,action,rewards,prob_mx,rows,cols,gamma):
         self.policy = policy 
         self.value = value
         self.action = action
-        self.reward = q_fn
+        self.reward = rewards
         self.prob_mx = prob_mx
         self.rows = rows
         self.cols = cols
@@ -55,28 +55,26 @@ class gridworld_policy_iteration:
         helper = np.copy(self.value)
         for s in range(len(self.policy)):
             potential_values = np.zeros((len(self.action),1))
-            # if(s==6):
-            #     print(s)
             for a in range(len(self.action)):
-                reward_offset = s*len(self.action)+a #rewards are based on transitions so each state has its own chunk based on actions
                 offset_index = int(len(self.prob_mx)/len(self.action))
                 start_index = int(a*offset_index)
                 start_index+=int(s)*len(self.policy)
                 prob_mx_work = np.copy(self.prob_mx[start_index:start_index+len(self.policy)])
+                reward_mx_work = np.copy(self.reward[start_index:start_index+len(self.policy)])
                 possible_state = np.where(prob_mx_work>0)
                 future_state_sum = 0
+                reward_sum = 0
                 for i in range(len(possible_state[0])):
                     prob = prob_mx_work[possible_state[0][i]]
                     future_state_sum+=prob*self.value[possible_state[0][i]]
-                potential_values[a] = self.policy[s][a]*(self.reward[reward_offset]+self.gamma*future_state_sum)
+                    reward_sum += prob*reward_mx_work[possible_state[0][i]]
+                potential_values[a] = self.policy[s][a]*(reward_sum+self.gamma*future_state_sum)
             helper[s] = sum(potential_values)
         self.value = helper
         
     def iterate(self):
         policy_new = np.zeros(np.shape(self.policy))
         for s in range(len(policy_new)):
-            if(s==3):
-                print("wtf")
             store = []
             if(s+self.cols<self.rows*self.cols):
                 store.append(self.value[s+self.cols])

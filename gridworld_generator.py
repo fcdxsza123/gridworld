@@ -194,38 +194,35 @@ class gridworld_generator:
         df.to_csv('input.csv',index=False)
         return df
     
-    def q_calculator(self):
+    def reward_calculator(self):
         #num of actions in order: up right down left stay
-        rewards_at_transition = np.zeros(len(self.rewards)*5)
+        rewards_at_transition = np.zeros(len(self.rewards)**2*5)
         counter = 0
-        for s in range(len(self.rewards)):
-            for a in range(5):
-                if(not(s in self.obstacle_locations)):
-                    if(a == 0):
-                        if(s+self.cols>=self.cols*self.rows or ((s+self.cols) in self.obstacle_locations)):
-                             rewards_at_transition[counter] = 0
+        for a in range(5):
+            for s in range(len(self.rewards)):
+                # top = s+self.cols>=self.cols*self.rows or ((s+self.cols) in self.obstacle_locations)
+                # rightside = s%self.cols==(self.cols-1) or ((s+1) in self.obstacle_locations)
+                # leftside = s%self.cols==0  or ((s-1) in self.obstacle_locations)
+                # bottom = s-self.cols<0 or ((s-self.cols) in self.obstacle_locations)
+                for s_prime in range(len(self.rewards)):
+                    if(not(s in self.obstacle_locations)): # check if current state is an obstacle, if so fill with zeros
+                        if(s_prime==s+self.cols):
+                            rewards_at_transition[counter] = self.rewards[s+self.cols]
+                        elif(s_prime==s+1):
+                            rewards_at_transition[counter] = self.rewards[s+1]
+                        elif(s_prime==s-self.cols):
+                            rewards_at_transition[counter] = self.rewards[s-self.cols]
+                        elif(s_prime==s-1):
+                            rewards_at_transition[counter] = self.rewards[s-1]
+                        elif(s_prime==s):
+                            rewards_at_transition[counter] = self.rewards[s]
                         else:
-                             rewards_at_transition[counter] = self.rewards[s+self.cols]
-                    elif(a==1):
-                        if(s%self.cols==(self.cols-1) or ((s+1) in self.obstacle_locations)):
                             rewards_at_transition[counter] = 0
-                        else:
-                             rewards_at_transition[counter] = self.rewards[s+1]
-                    elif(a==2):
-                        if(s-self.cols<0 or ((s-self.cols) in self.obstacle_locations)):
-                             rewards_at_transition[counter] = 0
-                        else:
-                             rewards_at_transition[counter] = self.rewards[s-self.cols]
-                    elif(a==3):
-                        if(s%self.cols==0  or ((s-1) in self.obstacle_locations)):
+                        if(s_prime in self.obstacle_locations):
                             rewards_at_transition[counter] = 0
-                        else:
-                             rewards_at_transition[counter] = self.rewards[s-1]
-                    elif(a==4):
-                        rewards_at_transition[counter] = self.rewards[s]
-                else:
-                    rewards_at_transition[counter] = 0
-                counter+=1
+                    else:
+                        rewards_at_transition[counter] = 0
+                    counter+=1
         dfsave = pd.DataFrame(rewards_at_transition)
         dfsave.columns = ['transition rewards']
         filepath = 'rewards_at_transition.csv'
@@ -236,5 +233,5 @@ class gridworld_generator:
         self.transition_calculator()
         self.observation_calculator()
         MDP = self.create()
-        Q_fn = self.q_calculator()
-        return MDP, Q_fn
+        rew = self.reward_calculator()
+        return MDP, rew

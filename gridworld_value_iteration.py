@@ -8,14 +8,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class gridworld_value_iteration:
-    def __init__(self,policy,value,action,q_fn,prob_mx,rows,cols,gamma):
+    def __init__(self,policy,value,action,rewards,prob_mx,rows,cols,gamma):
         self.gamma = gamma
         self.value = value
         self.action = action
         self.prob_mx = prob_mx
         self.rows = rows
         self.cols = cols
-        self.reward = q_fn
+        self.reward = rewards
         self.policy = np.zeros(np.shape(policy))
         
     def iteration(self):
@@ -26,21 +26,23 @@ class gridworld_value_iteration:
             # if(s==6):
             #     print(s)
             for a in range(len(self.action)):
-                reward_offset = s*len(self.action)+a #rewards are based on transitions so each state has its own chunk based on actions
                 offset_index = int(len(self.prob_mx)/len(self.action))
                 start_index = int(a*offset_index)
                 start_index+=int(s)*len(self.policy)
                 prob_mx_work = np.copy(self.prob_mx[start_index:start_index+len(self.policy)])
+                reward_mx_work = np.copy(self.reward[start_index:start_index+len(self.policy)])
                 possible_state = np.where(prob_mx_work>0)
                 future_state_sum = 0
+                reward_sum = 0
                 for i in range(len(possible_state[0])):
                     prob = prob_mx_work[possible_state[0][i]]
                     future_state_sum+=prob*self.value[possible_state[0][i]]
-                potential_values[a] = self.reward[reward_offset]+self.gamma*future_state_sum
+                    reward_sum += prob*reward_mx_work[possible_state[0][i]]
+                potential_values[a] =(reward_sum+self.gamma*future_state_sum)
             helper[s] = np.max(potential_values)
             index = np.argmax(potential_values)
-            if(potential_values[4]==helper[s]):
-                index = 4
+            if(potential_values[-1]==helper[s]):
+                index = -1
             self.policy[s][index]=1
         self.value = helper
     def full(self,epsilon):
