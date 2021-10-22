@@ -30,10 +30,10 @@ class gridworld_generator_multiagent:
         cols_list = [*range(0,self.cols)]
         pos_list = list(itertools.product(rows_list,cols_list))
         self.states = list(itertools.product(pos_list,repeat=self.numAgents))
-        policy = np.zeros((len(rewards),5))
+        policy = np.zeros((len(rewards),len(self.actions)))
         for i in range(len(rewards)):
             # r = [.2,.2,.2,.2,.2]
-            r = [0,0,0,0,1]
+            r = np.zeros(len(self.actions))
             policy[i] = r
         self.init_policy = policy
         
@@ -131,11 +131,11 @@ class gridworld_generator_multiagent:
                         if(not(raw_states[j][n] in self.obstacle_locations)):
                             if(raw_states[m][n]==raw_states[j][n]+self.cols):
                                 nextProb *= upProbs[n]
-                            elif(raw_states[m][n]==raw_states[j][n]+1):
+                            elif(raw_states[m][n]==raw_states[j][n]+1 and (raw_states[m][n]%self.cols != 0)):
                                 nextProb *= rightProbs[n]
                             elif(raw_states[m][n]==raw_states[j][n]-self.cols):
                                 nextProb *= downProbs[n]
-                            elif(raw_states[m][n]==raw_states[j][n]-1):
+                            elif(raw_states[m][n]==raw_states[j][n]-1 and (raw_states[m][n]%self.cols != self.cols-1)):
                                 nextProb *= leftProbs[n]
                             elif(raw_states[m][n]==raw_states[j][n]):
                                 nextProb *= stayProbs[n]
@@ -274,45 +274,33 @@ class gridworld_generator_multiagent:
         df4.observation_probability=self.observations_probability
         df5.transition_probability = self.transition_probability
         df = pd.concat([df1, df2, df3, df4, df5],axis=1)
-        #df.to_csv('input.csv',index=False)
+        df.to_csv('input.csv',index=False)
         return df
     
-    def q_calculator_multiagent(self):
+    def r_calculator_multiagent(self):
         #num of actions in order: up right down left stay
-        rewards_at_transition = np.zeros(len(self.rewards)*5)
-        counter = 0
-        for s in range(len(self.rewards)):
-            for a in range(5):
-                if(not(s in self.obstacle_locations)):
-                    if(a == 0):
-                        if(s+self.cols>=self.cols*self.rows or ((s+self.cols) in self.obstacle_locations)):
-                             rewards_at_transition[counter] = 0
-                        else:
-                             rewards_at_transition[counter] = self.rewards[s+self.cols]
-                    elif(a==1):
-                        if(s%self.cols==(self.cols-1) or ((s+1) in self.obstacle_locations)):
-                            rewards_at_transition[counter] = 0
-                        else:
-                             rewards_at_transition[counter] = self.rewards[s+1]
-                    elif(a==2):
-                        if(s-self.cols<0 or ((s-self.cols) in self.obstacle_locations)):
-                             rewards_at_transition[counter] = 0
-                        else:
-                             rewards_at_transition[counter] = self.rewards[s-self.cols]
-                    elif(a==3):
-                        if(s%self.cols==0  or ((s-1) in self.obstacle_locations)):
-                            rewards_at_transition[counter] = 0
-                        else:
-                             rewards_at_transition[counter] = self.rewards[s-1]
-                    elif(a==4):
-                        rewards_at_transition[counter] = self.rewards[s]
-                else:
-                    rewards_at_transition[counter] = 0
-                counter+=1
+        rewards_at_transition = []
+        rawpos_list = [*range((self.rows*self.cols))]
+        raw_states = list(itertools.product(rawpos_list,repeat=self.numAgents))
+        for i in range(len(self.actions)):
+            for j in range(len(raw_states)):
+                for m in range(len(raw_states)):
+                    rewardVal = 0
+                    for n in range(self.numAgents):
+                        if raw_states[m][n] == self.ice_cream_1:
+                            rewardVal += 1
+                        elif raw_states[m][n] == self.ice_cream_2:
+                            rewardVal += 1
+                        elif raw_states[m][n]%self.cols == self.cols-1:
+                            rewardVal -= 20
+                        if raw_states[m].count(raw_states[m][n])>1:
+                            rewardVal -= 10
+                    rewards_at_transition.append(rewardVal)
         dfsave = pd.DataFrame(rewards_at_transition)
         dfsave.columns = ['transition rewards']
         filepath = 'rewards_at_transition.csv'
         dfsave.to_csv(filepath, index=False)     
+  
         return rewards_at_transition
     
     def q_calculator(self):
@@ -357,5 +345,5 @@ class gridworld_generator_multiagent:
         self.transition_calculator_multiagent()
         self.observation_calculator()
         MDP = self.create()
-        Q_fn = self.q_calculator()
-        return MDP, Q_fn
+        R_fn = self.r_calculator_multiagent()
+        return MDP, R_fn

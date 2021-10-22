@@ -8,14 +8,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class gridworld_value_iteration:
-    def __init__(self,policy,value,action,q_fn,prob_mx,rows,cols,gamma):
+    def __init__(self,policy,value,action,rewards,prob_mx,rows,cols,gamma):
         self.gamma = gamma
         self.value = value
         self.action = action
         self.prob_mx = prob_mx
         self.rows = rows
         self.cols = cols
-        self.reward = q_fn
+        self.reward = rewards
         self.policy = np.zeros(np.shape(policy))
         
     def iteration(self):
@@ -26,23 +26,22 @@ class gridworld_value_iteration:
             # if(s==6):
             #     print(s)
             for a in range(len(self.action)):
-                reward_offset = s*len(self.action)+a #rewards are based on transitions so each state has its own chunk based on actions
                 offset_index = int(len(self.prob_mx)/len(self.action))
                 start_index = int(a*offset_index)
                 start_index+=int(s)*len(self.policy)
                 prob_mx_work = np.copy(self.prob_mx[start_index:start_index+len(self.policy)])
+                reward_mx_work = np.copy(self.reward[start_index:start_index+len(self.policy)])
                 possible_state = np.where(prob_mx_work>0)
                 future_state_sum = 0
+                reward_sum = 0
                 for i in range(len(possible_state[0])):
                     prob = prob_mx_work[possible_state[0][i]]
                     future_state_sum+=prob*self.value[possible_state[0][i]]
-                potential_values[a] = self.reward[reward_offset]+self.gamma*future_state_sum
+                    reward_sum += prob*reward_mx_work[possible_state[0][i]]
+                potential_values[a] =(reward_sum+self.gamma*future_state_sum)
             helper[s] = np.max(potential_values)
-            index = np.argmax(potential_values)
-            if(potential_values[4]==helper[s]):
-                index = 4
-            self.policy[s][index]=1
         self.value = helper
+                
     def full(self,epsilon):
         old_value = np.copy(self.value)
         self.iteration()
@@ -56,9 +55,38 @@ class gridworld_value_iteration:
             new_value = np.copy(self.value)
             counter+=1
             delta = np.min([delta,np.max(np.abs(old_value-new_value))])
-        self.plot()
+        self.gen_policy()
+        #self.plot()
         return counter
 
+    def gen_policy(self):
+        policy_new = np.zeros(np.shape(self.policy))
+        for s in range(len(policy_new)):
+            store = []
+            if(s+self.cols<self.rows*self.cols):
+                store.append(self.value[s+self.cols])
+            else:
+                store.append(np.NINF)
+            if(s%self.cols!=(self.cols-1)):
+                store.append(self.value[s+1])
+            else:
+                store.append(np.NINF)
+            if(s-self.cols>=0):
+                store.append(self.value[s-self.cols])
+            else:
+                store.append(np.NINF)
+            if(s%self.cols!=0):
+                store.append(self.value[s-1])
+            else:
+                store.append(np.NINF)
+            store.append(self.value[s])
+            policy_value = np.max(store)
+            policy_index = np.argmax(store)
+            if(store[-1] == policy_value):
+                policy_index = -1
+            policy_new[s][policy_index] = 1
+        self.policy = policy_new
+        
     def plot(self):
         value_fn = np.reshape(self.value,(self.rows,self.cols))
         fig, ax = plt.subplots()
