@@ -43,8 +43,12 @@ class MDP_sim:
                 break
             else:
                 randVal-=prob_mx[possible_state[0][i]]
-        #calculate observation
-        obs_index =  len(self.obs)*newState
+        
+        self.current_state = newState
+        return newState
+    def observe(self):
+                #calculate observation
+        obs_index =  len(self.obs)*self.current_state
         obs_prob_mx = np.copy(self.obs_prob[obs_index:obs_index+len(self.obs)])
         randVal = np.random.random()
         possible_obs = np.where(obs_prob_mx>0)
@@ -54,10 +58,8 @@ class MDP_sim:
                 observation = possible_obs[0][i]
                 break
             else:
-                randVal-=obs_prob_mx[possible_obs[0][i]]        
-        self.current_state = newState
-        return newState, observation
-    
+                randVal-=obs_prob_mx[possible_obs[0][i]]
+        return observation
 # sim = MDP_sim()
 # while(True):
 #     act = sim.get_action()
