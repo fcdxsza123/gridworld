@@ -10,7 +10,6 @@ import pandas as pd
 
 class MDP_sim:
     def __init__(self,MDP,curr_state):
-        df = MDP
         
         self.action = MDP.action.dropna()
         self.state = MDP.state.dropna()

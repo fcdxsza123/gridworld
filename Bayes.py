@@ -40,9 +40,9 @@ for i in range(len(belief)):
     belief[i] = 1/((rows*cols)-len(obstacles))
     
 belief[obstacles] = 0
-trajectory = [1,1,4,4]
-obs = [0,0,0,0]
-stateTracker = 0
+trajectory = [1,1,4]
+trueStates = [starting_state,0,0,0]
+obs = np.copy(trueStates)
 priori = np.zeros(rows*cols)
 posteriori = belief
 
@@ -52,13 +52,15 @@ posteriori = belief
 
 for i in range(len(trajectory)):
     
-    obs[i] = simulator.observe()
-    state = simulator.world_update(trajectory[i])
     for j in range(rows*cols):
         sumVal = 0
         for k in range(rows*cols):
             sumVal += generator.transition_probability[(trajectory[i]*rows*cols*rows*cols)+(k*rows*cols)+j]*posteriori[k]
         priori[j] = sumVal
+        
+    trueStates[i+1] = simulator.world_update(trajectory[i])
+    obs[i] = simulator.observe()
+    
     eta = 0
     for x in range(rows*cols):
         
@@ -66,8 +68,7 @@ for i in range(len(trajectory)):
         eta += generator.observations_probability[(x*len(generator.observations))+obs[i]]*priori[x]
     posteriori = posteriori/eta
     belief = posteriori
-    
             
-        
+print(belief)
         
     
