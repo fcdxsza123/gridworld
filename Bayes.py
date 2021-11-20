@@ -13,7 +13,7 @@ rows = 5
 cols = 5
 ice_cream_loc_1 = 2 # zero indexed
 ice_cream_loc_2 = 12 # zero indexed
-wind_prob = 0.0
+wind_prob = 0.1
 obstacles = [6,7,16,17] # zero indexed
 starting_state = 0
 gamma = .4
@@ -40,8 +40,8 @@ for i in range(len(belief)):
     belief[i] = 1/((rows*cols)-len(obstacles))
     
 belief[obstacles] = 0
-trajectory = [1,1,4]
-trueStates = [starting_state,0,0,0]
+trajectory = [0,0,1,1]
+trueStates = [starting_state,0,0,0,0]
 obs = np.copy(trueStates)
 priori = np.zeros(rows*cols)
 posteriori = belief
@@ -70,5 +70,4 @@ for i in range(len(trajectory)):
     belief = posteriori
             
 print(belief)
-        
-    
+print(trueStates)
