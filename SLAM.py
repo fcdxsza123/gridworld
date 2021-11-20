@@ -56,16 +56,17 @@ class SLAM:
     def mapping(self):
         tran_prob = self.generator.transition_probability
         obs_prob = self.generator.observations_probability
-        states = cp.Variable(len(self.observations))
-        ice_creams = cp.Variable(2)
+        states = cp.Variable(len(self.observations),value=np.zeros(len(self.observations),dtype=int),integer=True)
+        ice_creams = cp.Variable(2,value=[0,1],integer=True)
         objective = cp.Maximize(1)
         for i in range(len(self.observations)-1):
-            objective += cp.Maximize(np.log(tran_prob(self.actions_taken[i]*self.rows*self.rows*self.cols*self.cols+states[i]+states[i+1])))
+            objective += cp.Maximize(np.log(tran_prob[self.actions_taken[i]*self.rows*self.rows*self.cols*self.cols+np.round(states.value[i])*self.rows*self.cols+np.round(states.value[i+1])]))
         # for i in len(self.observations):
         #     fake
         constraints = [ice_creams >=0, ice_creams <=self.rows*self.cols-1, states>=0, states <=self.rows*self.cols-1]
         problem =  cp.Problem(objective, constraints)
-        problem.solve()
+        problem.solve(solver='GLPK_MI')
         # self.icecream = ice_creams.value
         print(states.value)
+        print(ice_creams.value)
         
